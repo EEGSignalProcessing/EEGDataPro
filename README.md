@@ -44,7 +44,7 @@ GETTING STARTED
 
 Visit the [wiki page](https://github.com/cogsmac/TMSEEG/wiki/Getting-Started) for links to [sample data sets](http://www.tmseeg.com/wp-content/uploads/2016/05/SampleData.zip) and the [offical tutorial](http://www.tmseeg.com/tutorials/). A couple main things to keep in mind  
 
-1) TMSEEG toolbox requires [EEGLAB](https://sccn.ucsd.edu/eeglab/downloadtoolbox.php) to be installed
+1) EEGDataPro toolbox requires [EEGLAB](https://sccn.ucsd.edu/eeglab/downloadtoolbox.php) to be installed
 2) MATLAB is picky about [paths](http://www.mathworks.com/help/matlab/ref/path.html?s_tid=gn_loc_drop). After download, pay attention to how the paths are set as indicated by the tutorial and documentation. If you receive an error that a file is missing it is probably because either the dependencies are not installed or because the paths are not set correctly
-3) You'll also need to download [FastICA](http://www.cis.hut.fi/projects/ica/fastica/) and have it on your path for the TMSEEG toolbox to work as is
-4) Once you've downloaded everything and have your paths set, open MATLAB to the folder containing TMSEEG and simply doubleclick the .mlappinstall file (eegdatapro_v1.0.mlappinstall).
+3) You'll also need to download [FastICA](http://www.cis.hut.fi/projects/ica/fastica/) and have it on your path for the EEGDataPro toolbox to work as is
+4) Once you've downloaded everything and have your paths set, open MATLAB to the folder containing EEGDataPro and simply doubleclick the .mlappinstall file (eegdatapro_v1.0.mlappinstall).
