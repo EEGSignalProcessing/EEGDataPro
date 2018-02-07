@@ -1,10 +1,9 @@
-# TMSEEG
-An online repository of the TMSEEG toolbox (http://www.tmseeg.com)
+# EEGDataPro
+An online repository of the EEGDataPro toolbox (http://www.tmseeg.com)
 
 INTRODUCTION
 -------------------
-TMSEEG is a Matlab App designed for streamlined processing of EEG data 
-collected during TMS application.  Processing steps are presented using a
+EEGDataPro is a Matlab App designed for streamlined processing of EEG data.  Processing steps are presented using a
 GUI format with modularity.  
 
 REQUIREMENTS
@@ -20,7 +19,7 @@ EEGLAB and MATLAB support backward compatibility with more recent releases.
 INSTALLATION
 ---------------------
 
-TMSEEG is packages as a MATLAB App for easy installation.  For further 
+EEGDataPro is packages as a MATLAB App for easy installation.  For further 
 instruction: 
 http://www.mathworks.com/videos/packaging-and-installing-matlab-apps-70404.html
 
