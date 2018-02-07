@@ -8,7 +8,7 @@ GUI format with modularity.
 
 REQUIREMENTS
 --------------------
-TMSEEG was built on MATLAB v2013a, with use of EEGLAB v12.0.2.6b.  Both
+EEGDataPro was built on MATLAB v2017b, with use of EEGLAB v14.1.1.b.  Both
 EEGLAB and MATLAB support backward compatibility with more recent releases.
 
 * MATLAB  - http://www.mathworks.com/products/matlab/
