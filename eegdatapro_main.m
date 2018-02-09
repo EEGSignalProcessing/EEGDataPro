@@ -178,8 +178,8 @@ if ~strcmp(basefile,'None Selected')
 
             %close all open windows
             set(S.hfig,'HandleVisibility','off')
-            main_fig2 = findobj('type','figure','name','Create a processing routine');
-            main_fig3 = findobj('type','figure','name','Choose a processing routine');
+            main_fig2 = findobj('type','figure','name','EEGDataPro - Create processing routine')
+            main_fig3 = findobj('type','figure','name','EEGDataPro - Choose processing routine')
             set(main_fig2,'HandleVisibility','off');
             set(main_fig3,'HandleVisibility','off');
             close all;
@@ -202,8 +202,8 @@ else
 
     %close all open windows
     set(S.hfig,'HandleVisibility','off')
-    main_fig2 = findobj('type','figure','name','Create a processing routine');
-    main_fig3 = findobj('type','figure','name','Choose a processing routine');
+    main_fig2 = findobj('type','figure','name','EEGDataPro - Create processing routine');
+    main_fig3 = findobj('type','figure','name','EEGDataPro - Choose processing routine');
     set(main_fig2,'HandleVisibility','off');
     set(main_fig3,'HandleVisibility','off');
     close all;
