@@ -31,18 +31,26 @@ end
 
 global basepath
 global comptype
+global chans_rm
 
 %Load Data
 [files, EEG] = eegdatapro_load_step(step_num);
 [~,name,~] = fileparts(files.name);
 
-%Check for existing ICA2 removal data
+%Check for existing ICA removal data
 if exist(fullfile(basepath,[name '_' num2str(step_num) sprintf('_ICA%dcomp.mat',option_num)]),'file')
-    load(fullfile(basepath,[name '_' num2str(step_num) sprintf('_ICA%dcomp.mat',option_num)])); %#ok
+    load(fullfile(basepath,[name '_' num2str(step_num) sprintf('_ICA%dcomp.mat',option_num)])); 
     comptype = eval(sprintf('ICA%dcomp',option_num));
     EEG.comptype = comptype;
 else
     comptype = zeros(1,size(EEG.icawinv,2));
+end
+
+%Check for existing ICA channels removed
+if exist(fullfile(basepath,[name sprintf('_ICA%dchansUnsel.mat',option_num)]),'file')
+    load(fullfile(basepath,[name sprintf('_ICA%dchansUnsel.mat',option_num)])); 
+else
+    chans_rm = [];
 end
 
 eegdatapro_multiples_topos(EEG,name, S, step_num, option_num);

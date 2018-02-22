@@ -42,14 +42,23 @@ if isfield(EEG,'nbchan_o')
 end
 EEG.channels_interpolated = find(badchan);
 EEG = eeg_checkset(EEG);
-EEG = pop_reref(EEG, []);
+
+re_ref = questdlg('Re-reference to average?');
+if strcmp(re_ref,'Yes')
+    EEG = pop_reref(EEG, []);
+    EEG = eeg_checkset( EEG );
+end
 
 %Add back removed time segment
 r=S.routine;
 
 if sum(strcmp(r.option_name,'REMOVE TMS ARTIFACT'))~=0
-    EpochSecs = EEG.epoch_length;
-    EEG = tmseeg_addTMSTimeBack(EEG, EpochSecs); 
+    [~,ind]=max((strcmp(r.option_name,'REMOVE TMS ARTIFACT'))==1);
+    add_buffer = questdlg(strcat(['Add buffer time to for time periods deleted in step ' num2str(ind) '?']));
+    if strcmp(add_buffer,'Yes')
+        EpochSecs = EEG.epoch_length;
+        EEG = tmseeg_addTMSTimeBack(EEG, EpochSecs); 
+    end
 end
 
 save(fullfile(basepath,[basefile '_eegdatapro_settings.mat']), 'VARS');

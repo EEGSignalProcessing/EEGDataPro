@@ -30,19 +30,48 @@ if tmseeg_previous_step(step_num)
     return
 end
  
-global VARS
+global basepath VARS chans_rm
 
 %Data Load
 [files, EEG] = eegdatapro_load_step(step_num);
-ICA_COMP_NUM = ceil(EEG.nbchan*VARS.(sprintf('ICA_COMP_PCT_%d',option_num))/100);
+[~,name,~]          = fileparts(files.name); 
+S.name              = name;
+
+del_chans = questdlg('Unselect some channels for ICA?');
+
+chans_rm = [];
+if strcmp(del_chans,'Yes')
+    EEG = channels_del(EEG);   
+    EEG = eeg_checkset( EEG );
+end
+
+
+ICA_COMP_NUM = ceil((EEG.nbchan-length(chans_rm))*VARS.(sprintf('ICA_COMP_PCT_%d',option_num))/100);
+
 
 %Run ICA, save new dataset
 h1 = msgbox(['Running ICA ' num2str(option_num) ' now!']);
-EEG   = pop_runica( EEG, 'icatype' ,'fastica','g','tanh',...
+EEG_ica=EEG;
+EEG_O=EEG;
+EEG_ica.nbchan=EEG.nbchan-length(chans_rm);
+EEG_ica.data=EEG.data(setdiff(1:EEG.nbchan,chans_rm),:,:);
+EEG_ica.chanlocs=EEG.chanlocs(setdiff(1:EEG.nbchan,chans_rm));
+EEG_ica   = pop_runica( EEG_ica , 'icatype' ,'fastica','g','tanh',...
 'approach','symm','lasteig',ICA_COMP_NUM);
+
+
+EEG=EEG_ica;
+EEG.data=EEG_O.data;
+EEG.chanlocs=EEG_O.chanlocs;
+EEG.nbchan=EEG_O.nbchan;
+EEG.data(setdiff(1:EEG.nbchan,chans_rm),:,:)=EEG_ica.data;
+
 EEG   = eeg_checkset(EEG);
 
 tmseeg_step_check(files, EEG, S, step_num);
+if ~isempty(chans_rm)
+    save(fullfile(basepath,[S.name '_' num2str(step_num)  sprintf('_ICA%dchansUnsel.mat',option_num)]), 'chans_rm');
+end
 
 if ishandle(h1)
     close(h1);
@@ -50,3 +79,51 @@ end
 
 end
 
+function [EEG] = channels_del(EEG)
+% Calls channel plot through EEGLAB topoplot() function, allows selection
+% of channels for deletion with list
+
+%Channels display
+t = figure;
+topoplot([],EEG.chanlocs,'style','blank','electrodes','labelpoint');
+channel_list = uicontrol('style','list','max',10,...
+     'Units','normalized',...
+     'min',1,'Position',[0.85 0.1 0.1 0.8],...
+     'Parent',t,...
+     'string',{EEG.chanlocs.labels});
+done_button = uicontrol('style','pushbutton',...
+     'Units','normalized',...
+     'string','Done',...
+     'Position',[0.75 0.1 0.1 0.05],...
+     'Parent',t,...
+     'Callback',{@retrieve_value,channel_list,t, {EEG.chanlocs.labels}}); %#ok
+cancel_button = uicontrol('style','pushbutton',...
+     'Units','normalized',...
+     'string','Cancel',...
+     'Position',[0.75 0.05 0.1 0.05],...
+     'Parent',t,...
+     'Callback',{@cancel_call,t}); %#ok
+waitfor(t)
+
+end
+
+function retrieve_value(varargin)
+%Retrieve user-selected channels from list for deletion
+global chans_rm
+h_list = varargin{3};
+labels = varargin{5};
+chans_sel = get(h_list,'value');
+del_txt = ['Unselect channels for ICA?' labels(chans_sel) ];
+choice = questdlg(del_txt);
+
+if strcmp(choice,'Yes')
+    chans_rm = chans_sel;
+    close(varargin{4})
+end
+
+end
+
+function cancel_call(varargin)
+%Cancel selection of channels for removal
+close(varargin{3});
+end

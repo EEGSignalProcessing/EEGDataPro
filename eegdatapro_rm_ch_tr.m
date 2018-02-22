@@ -370,7 +370,7 @@ A        = varargin{4};
 EEG.nbchan_o = EEG.nbchan;
 EEG.trials_o = EEG.trials;
 try
-    if exist([basepath '\' S.name '_' num2str(S.step_num) '_toDelete.mat'],'file')
+    if exist([basepath '/' S.name '_' num2str(S.step_num) '_toDelete.mat'],'file')
         load(fullfile(basepath,[S.name '_' num2str(S.step_num) '_toDelete.mat']));
     else
         toDelete = [];

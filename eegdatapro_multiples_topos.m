@@ -35,7 +35,8 @@
 % GNU General Public License for more details.
 
 function eegdatapro_multiples_topos(EEG,name, A, step_num, option_num)
-global I comptype backcolor VARS
+global I comptype backcolor VARS chans_rm
+
 S2.topos = figure('menubar','none',...
               'Toolbar','none',...
               'Units','normalized',...
@@ -63,7 +64,7 @@ n       = find(fact(:,3)>=N,1,'first');
 %-----------------kurtosis-based estimation of Electrode artifacts---------
 kthre   = VARS.(sprintf('KURTOSIS_THRESH_%d',option_num));
 t       = EEG.times>0 & EEG.times<1000;
-EEGdata = EEG.data(:,t,:);
+EEGdata = EEG.data(setdiff(1:EEG.nbchan,chans_rm),t,:);
 
 a = icavar(EEGdata(:,:),EEG.icaweights,EEG.icasphere,0);
 a = reshape(a,[N size(EEGdata,2) size(EEG.data,3)]);
@@ -140,7 +141,7 @@ for k = 1:size(EEG.icawinv,2)
     tag = ['ICA ' num2str(I(k)) ];
     icad(k).tg = uicontrol(gcf,'style','text','units','normalized','Position', [p(1)+0.017 p(2) + (p(4) + 0.023) 0.038 0.022],...
         'Tag',num2str(k),'String',tag);
-    
+        
     topoplot(EEG.icawinv(:,I(k)),EEG.chanlocs,'colormap',colormap(jet)); %Ch Subplot to blank topography plot
     set(icad(k).pb,'callback',{@disp_call, EEG,icad(k)}) % Setting callback for push button
     
@@ -196,7 +197,7 @@ end
 function [] = save_call(varargin)
 %Saves and removes components set for removal by the user
 
-global I comptype basepath existcolor
+global I comptype basepath existcolor chans_rm
 EEG      = varargin{3};
 name     = varargin{4};
 A        = varargin{5};
@@ -219,20 +220,33 @@ end
 EEG.comp2rem = I(cmp);
 EEG.comptype = comptype;
 EEG.ref;
-EEG.nbchan
 for i = 1:EEG.nbchan
     EEG.chanlocs(i).labels;
 end
-size(EEG.data(1,:,:))
 
-EEG         = pop_subcomp(EEG,EEG.comp2rem,0); 
+EEG_O = EEG;
+EEG_ica = EEG;
+EEG_ica.nbchan=EEG.nbchan-length(chans_rm);
+EEG_ica.data=EEG.data(setdiff(1:EEG.nbchan,chans_rm),:,:);
+EEG_ica.chanlocs=EEG.chanlocs(setdiff(1:EEG.nbchan,chans_rm));
+EEG_ica          = pop_subcomp(EEG_ica,EEG.comp2rem,0); 
+EEG=EEG_ica;
+EEG.data=EEG_O.data;
+EEG.chanlocs=EEG_O.chanlocs;
+EEG.nbchan=EEG_O.nbchan;
+EEG.data(setdiff(1:EEG.nbchan,chans_rm),:,:)=EEG_ica.data;
+
+EEG          = eeg_checkset( EEG );
+
+
+% EEG         = pop_subcomp(EEG,EEG.comp2rem,0); 
 EEG          = eeg_checkset( EEG );
 A.(sprintf('ICA%dcomp',1)) = comptype; 
 
 %Save data, update main GUI
 [files, ~] = eegdatapro_load_step(step_num);
 tmseeg_step_check(files, EEG, A, step_num)
-save(fullfile(basepath,[name '_' num2str(step_num)  sprintf('_ICA%dcomp.mat',option_num)]), '-struct', 'A', sprintf('ICA%dcomp',1));
+save(fullfile(basepath,[name '_' num2str(step_num)  sprintf('_ICA%dcomp.mat',option_num)]), '-struct', 'A', sprintf('ICA%dcomp',option_num));
 
 
 close
@@ -243,7 +257,7 @@ end
 function [] = update_call(varargin)
 %Displays the EEG dataset with selected components removed
 
-global I comptype basepath existcolor VARS
+global I comptype basepath existcolor VARS chans_rm
 EEG    = varargin{3};
 name   = varargin{4};
 A      = varargin{5};
@@ -267,8 +281,18 @@ EEG.comptype = comptype;
 ICA2comp     = comptype;
 tmseeg_displ_comp(comptype,I)
 EEG_O = EEG;
-EEG          = pop_subcomp(EEG,EEG.comp2rem,0); 
-EEG          = eeg_checkset( EEG );
+EEG_ica = EEG;
+EEG_ica.nbchan=EEG.nbchan-length(chans_rm);
+EEG_ica.data=EEG.data(setdiff(1:EEG.nbchan,chans_rm),:,:);
+EEG_ica.chanlocs=EEG.chanlocs(setdiff(1:EEG.nbchan,chans_rm));
+EEG_ica = pop_subcomp(EEG_ica,EEG.comp2rem,0); 
+EEG=EEG_ica;
+EEG.data=EEG_O.data;
+EEG.chanlocs=EEG_O.chanlocs;
+EEG.nbchan=EEG_O.nbchan;
+EEG.data(setdiff(1:EEG.nbchan,chans_rm),:,:)=EEG_ica.data;
+
+EEG = eeg_checkset( EEG );
 wdw_start = VARS.(sprintf('UPD_WDW_STRT_%d',option_num));
 wdw_end   = VARS.(sprintf('UPD_WDW_END_%d',option_num));
 
