@@ -49,6 +49,23 @@ if tmseeg_previous_step(step_num)
     return
 end
 
+if step_num ==1
+    % added July 2017 to work cross platform; special case for Macs to find
+    % appropriate eeglab installation. -C.M.
+    if ~isempty(strfind(computer, 'MAC')) || ~isempty(strfind(computer, 'GLNX'))
+        [~, findEEGLab] = system('find ~/ -name eeglab.m'); % find eeglab.m instances
+        cellDirs       = strsplit(findEEGLab); % split output into functional cells
+        containsApps   = strfind(cellDirs, '/Apps/'); % discern instance of eeglab in "Apps"
+
+        validDirs = find(cellfun(@isempty,containsApps));
+        gotoDir = cellDirs{validDirs(1)};
+
+        gotoDir = strrep(gotoDir, 'eeglab.m', '');
+        addpath(genpath(gotoDir)) % add eeglab files to path
+    %     eval(['cd ' gotoDir]) % change into eeglab directory
+    end
+end
+
 global backcolor VARS
 
 %Initializing filter parameters

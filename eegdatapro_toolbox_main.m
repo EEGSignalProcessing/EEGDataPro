@@ -48,6 +48,10 @@ if isempty(myappinfo)
     nameapp=[];
 else
     nameapp={myappinfo.name};
+    for i=1:size(myappinfo,2)
+        loc=myappinfo(i).location;
+        addpath(genpath(loc));
+    end
 end
 
 cmpbutton1=zeros(size(nameapp,2),3);
