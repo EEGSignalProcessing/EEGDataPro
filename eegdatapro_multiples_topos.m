@@ -142,7 +142,7 @@ for k = 1:size(EEG.icawinv,2)
     icad(k).tg = uicontrol(gcf,'style','text','units','normalized','Position', [p(1)+0.017 p(2) + (p(4) + 0.023) 0.038 0.022],...
         'Tag',num2str(k),'String',tag);
         
-    topoplot(EEG.icawinv(:,I(k)),EEG.chanlocs,'colormap',colormap(jet)); %Ch Subplot to blank topography plot
+    topoplot(EEG.icawinv(:,I(k)),EEG.chanlocs(setdiff(1:EEG.nbchan,chans_rm)),'colormap',colormap(jet)); %Ch Subplot to blank topography plot
     set(icad(k).pb,'callback',{@disp_call, EEG,icad(k)}) % Setting callback for push button
     
     

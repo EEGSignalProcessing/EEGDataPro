@@ -18,6 +18,7 @@ for i = 1:tostep
        
         for j = 1:tostep
             delete([basepath '/*' basefile checkext '_ICA' num2str(j) 'comp.mat']);
+            delete([basepath '/*' basefile checkext '_ICA' num2str(j) 'chansUnsel.mat']);
         end
         
     end
