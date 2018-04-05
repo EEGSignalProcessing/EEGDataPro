@@ -367,8 +367,14 @@ S        = varargin{3};
 S        = guidata(S.fh);
 A        = varargin{4};
 [files, EEG] = eegdatapro_load_step(S.step_num);
-EEG.nbchan_o = EEG.nbchan;
-EEG.trials_o = EEG.trials;
+
+if ~isfield(EEG,'nbchan_o')
+    EEG.nbchan_o = EEG.nbchan;
+end
+if ~isfield(EEG,'trials_o')
+    EEG.trials_o = EEG.trials;
+end
+
 try
     if exist([basepath '/' S.name '_' num2str(S.step_num) '_toDelete.mat'],'file')
         load(fullfile(basepath,[S.name '_' num2str(S.step_num) '_toDelete.mat']));
