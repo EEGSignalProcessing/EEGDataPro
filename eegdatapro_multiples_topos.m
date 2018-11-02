@@ -385,7 +385,7 @@ function place_dot(varargin)
 global I comptype
 obj = varargin{1};
 if ~get(obj,'value')
-    o = findobj('tag',get(obj,'tag'),'style','push');
+    o = findobj('tag',get(obj,'tag'),'style','push','Backgroundcolor',[0.94 0.94 0.94]);
     set(o,'string','');
     comptype(I(str2num(get(obj,'tag'))))=0;
 end
