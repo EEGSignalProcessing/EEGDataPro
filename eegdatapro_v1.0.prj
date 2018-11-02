@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="1088426024" file="C:\Users\bjmsc\Documents\MATLAB\EEGDataPro-1.0\eegdatapro_v1.0.prj" location="C:\Users\bjmsc\Documents\MATLAB\EEGDataPro-1.0" name="eegdatapro_v1.0" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="4124954104" file="C:\Users\bjmsc\Documents\MATLAB\EEGDataPro-1.0\eegdatapro_v1.0.prj" location="C:\Users\bjmsc\Documents\MATLAB\EEGDataPro-1.0" name="eegdatapro_v1.0" target="target.mlapps" target-name="Package App">
     <param.appname>eegdatapro_v1.0</param.appname>
     <param.authnamewatermark />
     <param.email />
