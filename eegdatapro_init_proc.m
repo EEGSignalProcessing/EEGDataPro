@@ -23,7 +23,7 @@
 function [] = eegdatapro_init_proc(S, step_num)
 
 %Check if previous steps were done
-if tmseeg_previous_step(step_num) 
+if eegdatapro_previous_step(step_num) 
     return 
 end
 
@@ -80,9 +80,9 @@ end
 EEG.chanloc_orig = EEG.chanlocs; 
 EEG.epoch_length = length(EEG.times)/EEG.srate;
 
-tmseeg_step_check(files, EEG, S, S.step_num);
+eegdatapro_step_check(files, EEG, S, S.step_num);
 close(h);
-tmseeg_upd_stp_disp(S, '.set', S.step_num);
+eegdatapro_upd_stp_disp(S, '.set', S.step_num);
 
 end
 
@@ -210,7 +210,7 @@ if strcmp(baseline,'Yes') %Choose to resample
     if ~isempty(answer) %User enters a resampling value
 
         try
-            VARS.BASELINE_RNG = str2double(answer{1});
+            VARS.BASELINE_RNG = str2num(answer{1});
             EEG               = pop_rmbase(EEG,VARS.BASELINE_RNG); 
         catch
             error('Could not baseline data with given settings')

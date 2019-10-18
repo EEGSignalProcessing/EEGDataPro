@@ -26,7 +26,7 @@ function [] = eegdatapro_ica(S, step_num, option_num)
 %using EEGLab's pop_runica()
  
 %Check if previous steps were done
-if tmseeg_previous_step(step_num) 
+if eegdatapro_previous_step(step_num) 
     return
 end
  
@@ -68,7 +68,7 @@ EEG.data(setdiff(1:EEG.nbchan,chans_rm),:,:)=EEG_ica.data;
 
 EEG   = eeg_checkset(EEG);
 
-tmseeg_step_check(files, EEG, S, step_num);
+eegdatapro_step_check(files, EEG, S, step_num);
 if ~isempty(chans_rm)
     save(fullfile(basepath,[S.name '_' num2str(step_num)  sprintf('_ICA%dchansUnsel.mat',option_num)]), 'chans_rm');
 end

@@ -288,7 +288,7 @@ S = varargin{3};
 S = guidata(S.fh);
 S.trial = trial;
 guidata(S.fh, S);
-tmseeg_plot_Trial(S);
+eegdatapro_plot_Trial(S);
 uiwait(gcf);
 plot_traces(S);
 uicontrol(findobj('tag','pop'));

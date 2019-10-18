@@ -86,7 +86,7 @@ for i=1:nb_function
             INIT_VARS.(sprintf('UPD_WDW_END_%d',num))=500;
             INIT_VARS.(sprintf('UPD_WDW_YMIN_%d',num))=-50;
             INIT_VARS.(sprintf('UPD_WDW_YMAX_%d',num))=50;
-            INIT_VARS.(sprintf('KURTOSIS_THRESH_%d',num))=15;
+            INIT_VARS.(sprintf('UPD_KURTOSIS_THRESH_%d',num))=15;
 
     end
     
@@ -100,7 +100,7 @@ for i=1:nb_function
         INIT_VARS.EPCH_STRT = EEG.times(1);
         INIT_VARS.EPCH_END = EEG.times(end);
     else
-        INIT_VARS.EPCH_STRT = 0;
+        INIT_VARS.EPCH_STRT = -1000;
         INIT_VARS.EPCH_END = 1000;
     end
     

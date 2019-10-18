@@ -45,7 +45,7 @@
 function eegdatapro_filt(A, step_num, option_num)
 
 %Check if previous steps were done
-if tmseeg_previous_step(step_num) 
+if eegdatapro_previous_step(step_num) 
     return
 end
 
@@ -287,7 +287,7 @@ global filt1_slider_low_fir filt1_slider_high_fir
 %FIR filter
 
 EEG.data= eegfilt(EEG.data(:,:),EEG.srate,filt1_slider_low_fir,filt1_slider_high_fir,size(EEG.data,2),FIR_FILTER_ORDER,0);
-tmseeg_step_check(files, EEG, A, step_num);
+eegdatapro_step_check(files, EEG, A, step_num);
 close;
 
 end
@@ -366,12 +366,15 @@ ord = IIR_FILTER_ORDER;
 
 %Apply Filter
 for ch=1:size(EEG.data,1)
-	tempA=filtfilt(xall1,yall2,reshape(double(EEG.data(ch,:)),size(EEG.data,2),size(EEG.data,3)));
+	tempA=filtfilt(xall1,yall2,squeeze(double(EEG.data(ch,:,:))));
 	tempB=filtfilt(xs1,xs2,double(tempA)); % apply notch filter
 	EEG.data(ch,:,:)= double(tempB);
+%     tempA=filtfilt(xall1,yall2,double(EEG.data(ch,:)));
+% 	tempB=filtfilt(xs1,xs2,double(tempA)); % apply notch filter
+% 	EEG.data(ch,:)= double(tempB);
 end
 
-tmseeg_step_check(files, EEG, A, step_num)
+eegdatapro_step_check(files, EEG, A, step_num)
 close;
 
 end

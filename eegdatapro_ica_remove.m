@@ -25,7 +25,7 @@
 function [] = eegdatapro_ica_remove(S, step_num, option_num)
 
 %Check if previous steps were done
-if tmseeg_previous_step(step_num) 
+if eegdatapro_previous_step(step_num) 
     return 
 end
 

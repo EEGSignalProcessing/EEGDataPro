@@ -23,7 +23,7 @@
 function eegdatapro_interpolation(S,step_num)
 
 %Check if previous steps were done
-if tmseeg_previous_step(step_num)
+if eegdatapro_previous_step(step_num)
     return 
 end
 
@@ -57,11 +57,11 @@ if sum(strcmp(r.option_name,'REMOVE TMS ARTIFACT'))~=0
     add_buffer = questdlg(strcat(['Add buffer time to for time periods deleted in step ' num2str(ind) '?']));
     if strcmp(add_buffer,'Yes')
         EpochSecs = EEG.epoch_length;
-        EEG = tmseeg_addTMSTimeBack(EEG, EpochSecs); 
+        EEG = eegdatapro_addTMSTimeBack(EEG, EpochSecs); 
     end
 end
 
 save(fullfile(basepath,[basefile '_eegdatapro_settings.mat']), 'VARS');
-tmseeg_step_check(files, EEG, S, step_num)
+eegdatapro_step_check(files, EEG, S, step_num)
 
 close(h)

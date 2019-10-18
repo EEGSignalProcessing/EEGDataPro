@@ -23,7 +23,7 @@ for i = 1:tostep
         
     end
     
-tmseeg_upd_stp_disp(S, ext, tostep)
+eegdatapro_upd_stp_disp(S, ext, tostep)
 
 end
 

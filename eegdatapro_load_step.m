@@ -7,7 +7,6 @@ checkext = '';
 
 if step_num==1
     files   = dir(fullfile(basepath,[basefile '.set']));
-    files.name
     EEG     = pop_loadset('filename',[basefile '.set'],'filepath',basepath);
 else
     

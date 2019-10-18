@@ -43,7 +43,7 @@
 function  eegdatapro_rm_ch_tr(A, step_num, option_num)
 
 %Check if previous steps were done
-if tmseeg_previous_step(step_num)
+if eegdatapro_previous_step(step_num)
     return
 end
 
@@ -227,9 +227,9 @@ S.fsp       = figure('units','normalized',...
 label_list = {S.EEG.chanlocs.labels};
 
 if VARS.(sprintf('HEAD_PLOT_%d',VARS.option_num))
-    S.sp          = tmseeg_plottopo (S.EEG.data,S.EEG.chanlocs)';
+    S.sp          = eegdatapro_plottopo (S.EEG.data,S.EEG.chanlocs)';
 else
-    S.sp          = tmseeg_plottopo (S.EEG.data)';
+    S.sp          = eegdatapro_plottopo (S.EEG.data)';
 end
          
 
@@ -359,7 +359,7 @@ end
 
 %Delete Selected Trials
 function [] = pb_del_tr_ch_call(varargin)
-% Calls tmseeg_rm_tagged_elements with the toDelete matrix to remove marked
+% Calls eegdatapro_rm_tagged_elements with the toDelete matrix to remove marked
 % channels and trials.  Saves cleaned dataset, toDelete matrix and updates
 % parent display
 global basepath
@@ -381,9 +381,9 @@ try
     else
         toDelete = [];
     end
-[EEG, GC, GT] = tmseeg_rm_tagged_elements(EEG,toDelete);
+[EEG, GC, GT] = eegdatapro_rm_tagged_elements(EEG,toDelete);
 EEG                = eeg_checkset( EEG );
-tmseeg_step_check(files, EEG, A, S.step_num)
+eegdatapro_step_check(files, EEG, A, S.step_num)
 save(fullfile(basepath,[S.name '_' num2str(S.step_num) '_toDelete.mat']), 'toDelete');
 
 close
@@ -451,7 +451,7 @@ S         = guidata(S.fh);
 trial = get_trial(S);
 S.trial = trial;
 guidata(S.fh,S);
-tmseeg_plot_trial(S);
+eegdatapro_plot_trial(S);
 end
 
 

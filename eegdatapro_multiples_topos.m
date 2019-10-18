@@ -62,7 +62,7 @@ N       = size(EEG.icawinv,2);
 n       = find(fact(:,3)>=N,1,'first');
 
 %-----------------kurtosis-based estimation of Electrode artifacts---------
-kthre   = VARS.(sprintf('KURTOSIS_THRESH_%d',option_num));
+kthre   = VARS.(sprintf('UPD_KURTOSIS_THRESH_%d',option_num));
 t       = EEG.times>0 & EEG.times<1000;
 EEGdata = EEG.data(setdiff(1:EEG.nbchan,chans_rm),t,:);
 
@@ -72,12 +72,38 @@ r = sum(mean(a,3),2);
 r       = 100.*r./mean(std(EEGdata(:,:),[],2));
 [~,I]   = sort(abs(r),'descend');
 
-tmseeg_displ_comp(comptype,I)
+eegdatapro_displ_comp(comptype,I)
 
 if ~isfield(EEG,'comptype')
     kurt    = kurtosis(EEG.icawinv);
     kurt    = kurt(I)>kthre;
 end
+
+
+%----------------------------EOG artifact estimation-----------------------
+blink=zeros(1,size(EEG.icawinv,2));
+
+CBI=zeros(size(EEG.icawinv));
+
+for i=1:size(EEG.icawinv,1)
+    for j=1:size(EEG.icawinv,2)
+        CBI(i,j)=abs(EEG.icawinv(i,j))/sqrt(sum(EEG.icawinv(i,:).^2));
+    end
+end
+
+[px,py] = cart2sph([EEG.chanlocs.X],[EEG.chanlocs.Y],[EEG.chanlocs.Z]);
+theta = px/pi*180; % azimuth coordinate
+phi = py/pi*180; % polar coordinate
+frontalelec = (abs(theta) <= 30) & (abs(phi) <= 30);
+frontalelec2 = (abs(theta) <= 60) & (abs(theta) > 30) & (abs(phi) <= 30);
+
+%potential_blink
+[~,potential_blink]=max(sum(CBI(frontalelec,:)));
+
+%check with frontal activity
+feature = mean(abs(EEG.icawinv(frontalelec,potential_blink)))>mean(abs(EEG.icawinv(frontalelec2,potential_blink)));
+
+blink(I==potential_blink)=double(feature);
 
 
 %----------------------------EMG artifact estimation-----------------------
@@ -106,7 +132,12 @@ end
 emg_ratio = freq_matrix(:,2)./freq_matrix(:,1);
 emg_thresh = 1.1;
 emg_tag = emg_ratio > emg_thresh;
+
+
+
+
 %--------------------Plotting the subplot,labels,buttons-------------------
+
 
 for k = 1:size(EEG.icawinv,2)
     if isfield(EEG,'comptype') && EEG.comptype(I(k))>0
@@ -117,6 +148,9 @@ for k = 1:size(EEG.icawinv,2)
     elseif ~isfield(EEG,'comptype') && kurt(k)
         type = label{5};
         comptype(I(k))=5;
+    elseif ~isfield(EEG,'comptype') && blink(k)
+        type = label{2};
+        comptype(I(k))=2;
     else
         type = '';
     end
@@ -129,7 +163,7 @@ for k = 1:size(EEG.icawinv,2)
         'Tag',num2str(k),'value',0,'callback',@place_dot); %'value',kurt(k)
     if isfield(EEG,'comptype') && EEG.comptype(I(k))>0
         set(icad(k).rb,'value',1)
-    elseif comptype(I(k))== 5 || comptype(I(k))== 3
+    elseif comptype(I(k))== 5 || comptype(I(k))== 3 || comptype(I(k))== 2
         set(icad(k).rb,'value',1)
     end
     
@@ -189,7 +223,7 @@ A = varargin{4};
 set(A.tg,'BackgroundColor','green')
 guidata(A.tg,A)
 
-tmseeg_pop_prop_modified_v2(EEG,0,I(comp),[],{'freqrange' [2 50]},A);
+eegdatapro_pop_prop_modified_v2(EEG,0,I(comp),[],{'freqrange' [2 50]},A);
 
 end
 
@@ -245,7 +279,7 @@ A.(sprintf('ICA%dcomp',1)) = comptype;
 
 %Save data, update main GUI
 [files, ~] = eegdatapro_load_step(step_num);
-tmseeg_step_check(files, EEG, A, step_num)
+eegdatapro_step_check(files, EEG, A, step_num)
 save(fullfile(basepath,[name '_' num2str(step_num)  sprintf('_ICA%dcomp.mat',option_num)]), '-struct', 'A', sprintf('ICA%dcomp',option_num));
 
 
@@ -279,7 +313,7 @@ end
 EEG.comp2rem = I(cmp);
 EEG.comptype = comptype;
 ICA2comp     = comptype;
-tmseeg_displ_comp(comptype,I)
+eegdatapro_displ_comp(comptype,I)
 EEG_O = EEG;
 EEG_ica = EEG;
 EEG_ica.nbchan=EEG.nbchan-length(chans_rm);

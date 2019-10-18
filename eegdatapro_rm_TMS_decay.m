@@ -35,7 +35,7 @@
 function [] = eegdatapro_rm_TMS_decay(A, step_num)
 
 %Check if previous steps were done
-if tmseeg_previous_step(step_num)
+if eegdatapro_previous_step(step_num)
     return
 end
 
@@ -216,7 +216,7 @@ disp(ind(selected))
 EEG = eeg_checkset( EEG );
 
 [files, ~] = eegdatapro_load_step(step_num);
-tmseeg_step_check(files, EEG, A, step_num)
+eegdatapro_step_check(files, EEG, A, step_num)
 close
 
 end

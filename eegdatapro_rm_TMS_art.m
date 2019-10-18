@@ -42,7 +42,7 @@
 function eegdatapro_rm_TMS_art(A, step_num)
 
 %Check if previous steps were done
-if tmseeg_previous_step(step_num)
+if eegdatapro_previous_step(step_num)
     return
 end
 
@@ -338,7 +338,7 @@ for index = 1 : nevents
     EEG.event(index).latency=EEG.event(index).latency-(index-1)*length(period2remove);
 end
 
-tmseeg_step_check(files, EEG, A, step_num)
+eegdatapro_step_check(files, EEG, A, step_num)
 
 end
 

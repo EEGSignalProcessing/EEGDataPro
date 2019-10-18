@@ -16,6 +16,7 @@
 function []= eegdatapro_toolbox_main()
 
 close all;
+clear all; 
 backcolor   = [0.7 0.8 1];
 
 % Main object, GUI Parent figure

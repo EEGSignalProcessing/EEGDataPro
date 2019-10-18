@@ -192,7 +192,7 @@ if ~strcmp(basefile,'None Selected')
             h = findobj('Tag','file_text');
             set(h,'String',['  ' basefile ])
             guidata(S.hfig,S);
-            tmseeg_upd_stp_disp(S, '.set', S.num_steps);
+            eegdatapro_upd_stp_disp(S, '.set', S.num_steps);
     end
     
 else
@@ -216,7 +216,7 @@ else
     h = findobj('Tag','file_text');
     set(h,'String',['  ' basefile ])
     guidata(S.hfig,S);
-    tmseeg_upd_stp_disp(S, '.set', S.num_steps);
+    eegdatapro_upd_stp_disp(S, '.set', S.num_steps);
 end
 
 end
@@ -231,7 +231,7 @@ global basepath basefile S VARS
 uigetfile(fullfile(basepath,'*.set'),'Select Original File');
 [~,basefile,ext]         = fileparts(filename);
 VARS = eegdatapro_init(S);
-tmseeg_upd_stp_disp(S, ext, S.num_steps)
+eegdatapro_upd_stp_disp(S, ext, S.num_steps)
 %Update Parent GUI
 h = findobj('Tag','file_text');
 set(h,'String',['  ' basefile ])
