@@ -479,6 +479,7 @@ ord = 2;
 [z1, p1, k1]      = butter(ord,[VARS.(sprintf('FREQ_MIN_%d',VARS.option_num)) VARS.(sprintf('FREQ_MAX_%d',VARS.option_num))]/(Fs/2),'bandpass');
 [xall1,yall2]   = zp2sos(z1,p1,k1);
 
+
 if (VARS.(sprintf('PULSE_ST_%d',VARS.option_num))==0) && (VARS.(sprintf('PULSE_END_%d',VARS.option_num))==0)
     switch get(findobj('tag','vv'),'value')
        case 1

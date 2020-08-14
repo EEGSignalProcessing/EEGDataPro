@@ -364,15 +364,24 @@ ord = IIR_FILTER_ORDER;
 [z2, p2, k2]      = butter(ord, [notch_center-(notch_size/2) notch_center+(notch_size/2)]/(Fs/2), 'stop'); % 10th order filter
 [xs1,xs2]       = zp2sos(z2,p2,k2); % Convert to 2nd order sections form
 
+
+concat_epoch = questdlg('Do you want to concatenate epochs before filtering?');
+
 %Apply Filter
-for ch=1:size(EEG.data,1)
-	tempA=filtfilt(xall1,yall2,squeeze(double(EEG.data(ch,:,:))));
-	tempB=filtfilt(xs1,xs2,double(tempA)); % apply notch filter
-	EEG.data(ch,:,:)= double(tempB);
-%     tempA=filtfilt(xall1,yall2,double(EEG.data(ch,:)));
-% 	tempB=filtfilt(xs1,xs2,double(tempA)); % apply notch filter
-% 	EEG.data(ch,:)= double(tempB);
+if strcmp(concat_epoch,'Yes')
+    for ch=1:size(EEG.data,1)
+        tempA=filtfilt(xall1,yall2,reshape(squeeze(double(EEG.data(ch,:,:))),size(EEG.data,2)*size(EEG.data,3),1));
+        tempB=filtfilt(xs1,xs2,double(tempA)); % apply notch filter
+        EEG.data(ch,:,:)= double(reshape(tempB,size(EEG.data,2),size(EEG.data,3)));
+    end
+else
+    for ch=1:size(EEG.data,1)
+        tempA=filtfilt(xall1,yall2,squeeze(double(EEG.data(ch,:,:))));
+        tempB=filtfilt(xs1,xs2,double(tempA)); % apply notch filter
+        EEG.data(ch,:,:)= double(tempB);
+    end
 end
+
 
 eegdatapro_step_check(files, EEG, A, step_num)
 close;

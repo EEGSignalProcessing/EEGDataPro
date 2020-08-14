@@ -145,11 +145,13 @@ delete(findall(gcf,'type','annotation'));
 
 global VARS fpsd psd lineposition
 
+
 lineposition=[];
 
 afterstep=varargin{3};
 
 [~, EEG] = eegdatapro_load_step(afterstep + 1);          
+psd = [];
 
 % axes('Position',[0.2 0.15 0.70 0.75]);          
 % pop_spectopo( EEG,1,[EEG.xmin*1000 EEG.xmax*1000],'EEG','percent',100,'freq',[2 6 20],'freqrange',VARS.SPECTRUM_RNG,'electrodes','on');
@@ -214,7 +216,7 @@ ylabel('Power Spectral Density (dB)','Fontsize',15);
 datatoplot=10*log10(psd(freq+1,:))-mean(10*log10(psd(freq+1,:)));
 
 axes('Position',[0.45 0.70 0.25 0.25]);
-topoplot(datatoplot,EEG.chanlocs);
+topoplot(datatoplot,EEG.chanlocs,'maplimits',[min(datatoplot) max(datatoplot)]);
 
 % for i=1:500
 %     datatoplot(i,:)=10*log10(psd(i,:))-mean(10*log10(psd(i,:)));
@@ -339,7 +341,7 @@ ylabel('Potential (\muV)','Fontsize',15);
 if ~isnan(y(:,time))
     datatoplot=y(:,time);
     axes('Position',[0.45 0.70 0.25 0.25]);
-topoplot(datatoplot,EEG.chanlocs);
+topoplot(datatoplot,EEG.chanlocs,'maplimits',[min(datatoplot) max(datatoplot)]);
 
 % for i=1:500
 %     datatoplot(i,:)=10*log10(psd(i,:))-mean(10*log10(psd(i,:)));
@@ -362,7 +364,7 @@ annotation('line',[0.2+(freq-x(1))/(x(end)-x(1)+1)*0.75 0.575],[0.1+(max(y(:,tim
 else
     datatoplot=zeros(1,EEG.nbchan);
     axes('Position',[0.45 0.70 0.25 0.25]);
-topoplot(datatoplot,EEG.chanlocs);
+topoplot(datatoplot,EEG.chanlocs,'maplimits',[min(datatoplot) max(datatoplot)]);
 colormap('gray');
 title(strcat([num2str(freq) 'ms']));
 cb = colorbar;
