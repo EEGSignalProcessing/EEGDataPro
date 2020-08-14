@@ -8,7 +8,7 @@ GUI format with modularity.
 
 REQUIREMENTS
 --------------------
-EEGDataPro was built originally on MATLAB 2017b, with use of EEGLAB v14.1.1b. This updated version requires MATLAB (2013a or later version) and EEGLAB v14.1.1b.
+EEGDataPro was built originally on MATLAB 2017b, with use of EEGLAB v14.1.1b. This updated version requires MATLAB (2020a or later version) and EEGLAB 2020.
 
 * [MATLAB](http://www.mathworks.com/products/matlab/)   
 * [EEGLAB ](http://sccn.ucsd.edu/eeglab/downloadtoolbox.php)
