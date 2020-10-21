@@ -437,6 +437,7 @@ end;
                                                               % array on current axes
         end;
     end;
+    yvals = (yvals-mean([max(yvals) min(yvals)]))/(max(yvals)-min(yvals)); % recenter
     yvals = gcapos(2)+gcapos(4)/2+PLOT_HEIGHT*yvals;  % controls height of plot 
                                                       % array on current axes
                                                       %
